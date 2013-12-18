@@ -1,4 +1,7 @@
 .bundle/
+tmp/
+db/seed_data/*.txt
+*.swp
 log/*.log
 pkg/
 spec/dummy/db/*.sqlite3
