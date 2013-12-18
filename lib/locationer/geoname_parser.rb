@@ -47,6 +47,18 @@ module Locationer
       end
     end
 
+    def name
+      downcase_attribute(__method__)
+    end
+
+    def asciiname
+      downcase_attribute(__method__)
+    end    
+
+    def alternatenames
+      downcase_attribute(__method__)
+    end       
+
     def fields
       FIELD_INDEX.keys
     end
@@ -79,6 +91,12 @@ module Locationer
       end
 
       obj_hash
+    end
+
+    private
+
+    def downcase_attribute(meth)
+      @row[FIELD_INDEX[meth]] && @row[FIELD_INDEX[meth]].downcase
     end
   end
 
