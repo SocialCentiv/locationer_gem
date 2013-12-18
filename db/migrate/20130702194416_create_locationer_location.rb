@@ -8,6 +8,7 @@ class CreateGeoData < ActiveRecord::Migration
       t.float     :longitude
       t.string    :feature_class
       t.string    :feature_code
+      t.string    :country_code
       t.string    :admin1_code
       t.integer   :population
       t.string    :timezone
