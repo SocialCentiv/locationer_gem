@@ -11,19 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131127214757) do
+ActiveRecord::Schema.define(version: 20131218163549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "locationer_geo_data", force: true do |t|
-    t.string   "country"
-    t.string   "city_name"
-    t.string   "state"
+  create_table "locationer_locations", force: true do |t|
+    t.string   "name"
+    t.string   "asciiname"
+    t.text     "alternatenames"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "feature_class"
+    t.string   "feature_code"
+    t.string   "admin1_code"
+    t.integer  "population"
+    t.string   "timezone"
+    t.datetime "modification_date"
+    t.text     "alter"
   end
 
 end

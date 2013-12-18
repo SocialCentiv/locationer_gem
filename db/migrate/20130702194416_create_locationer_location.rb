@@ -1,13 +1,17 @@
 class CreateGeoData < ActiveRecord::Migration
   def change
-    create_table :locationer_geo_data do |t|
-      t.string :country
-      t.string :city_name
-      t.string :state
-      t.float :latitude
-      t.float :longitude
-
-      t.timestamps
+    create_table "locationer_locations" do |t|
+      t.string    :name
+      t.string    :asciiname
+      t.text      :alternatenames
+      t.float     :latitude
+      t.float     :longitude
+      t.string    :feature_class
+      t.string    :feature_code
+      t.string    :admin1_code
+      t.integer   :population
+      t.string    :timezone
+      t.datetime  :modification_date 
     end
   end
 end
