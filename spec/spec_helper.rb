@@ -1,9 +1,10 @@
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 
+require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require 'factory-girl-rails'
+require 'factory_girl_rails'
+require 'byebug'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -18,5 +19,12 @@ RSpec.configure do |config|
   config.color = true
   config.include FactoryGirl::Syntax::Methods  
 end
+
+def fixture(file_name)
+  path = File.expand_path(File.join('./spec/fixtures/' , file_name))
+  raise "Fixture file does not exist!: '#{path}'" unless File.exist?(path)
+  path
+end
+
 
 
