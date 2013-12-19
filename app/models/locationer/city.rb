@@ -2,6 +2,9 @@ module Locationer
   class City < Location
     include LocationHelper
 
+    belongs_to :country, foreign_key: "country_code", primary_key: "country_code"
+    belongs_to :subdivision, foreign_key: "admin1_code", primary_key: "admin1_code"
+
     FEATURE_CLASS_CITY = "P"
     RADIUS_DEFAULT = 10
 
