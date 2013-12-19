@@ -1,6 +1,7 @@
 module Locationer
   class CityFinder
     DEFAULT_RANGE = 10
+    FEATURE_CODE_COUNTRY = "PCLI"
 
     def initialize(country = nil)
       @country = country || 'US'
