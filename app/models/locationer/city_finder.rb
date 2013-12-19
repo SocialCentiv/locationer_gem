@@ -3,11 +3,12 @@ module Locationer
     DEFAULT_RANGE = 10
     FEATURE_CODE_COUNTRY = "PCLI"
 
-    def initialize(country = nil)
-      @country = country || 'US'
+    def initialize(country_code)
+      @country = country_code
     end
 
     def nearby_cities(*options)
+      puts options.inspect
       attributes = options.extract_options!
       range = attributes.fetch(:range) { DEFAULT_RANGE }
       if city = find_city_by(attributes)
@@ -21,18 +22,22 @@ module Locationer
 
     def nearby_cities_query_string(city,range)
       <<-SQL
-        SELECT asciiname, admin1_code 
+        SELECT * 
         FROM locationer_locations 
-        WHERE sqrt(pow((longitude - #{city.longitude}) * cos(#{city.latitude} * pi() / 180),2) + pow(latitude - #{city.latitude},2)) * pi() * 7926.38 / 360 <= #{range} 
+        WHERE #{range_where_query_string(city,range)}
           AND feature_class = 'P' 
           AND feature_code LIKE 'PPL%'
       SQL
     end
 
+    def range_where_query_string(city,range)
+      "sqrt(pow((longitude - #{city.longitude}) * cos(#{city.latitude} * pi() / 180),2) + pow(latitude - #{city.latitude},2)) * pi() * 7926.38 / 360 <= #{range} "     
+    end
+
     def find_city_by(attributes)
       city_name = attributes.fetch(:city) { raise ArgumentError, 'No city name provided' }
       reference = Locationer::Location.where("country_code = ? AND asciiname = ?", @country.upcase, city_name.downcase)
-      reference = reference.where(admin1_code: attributes[:state]) if attributes[:state]
+      reference = reference.where(admin1_code: attributes[:subdivision]) if attributes[:subdivision]
       reference = reference.where(feature_class: "P")
       reference.first
     end
