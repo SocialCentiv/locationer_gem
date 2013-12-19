@@ -8,7 +8,7 @@ module Locationer
     end
 
     it "should create 10 records" do
-      expect{@geo_parser.db_insert}.to change{Locationer::Location.count}.by(10)
+      expect{@geo_parser.db_insert(progressbar: false)}.to change{Locationer::Location.count}.by(10)
     end
   end
 end
