@@ -1,4 +1,5 @@
 .bundle/
+unprocessed_records.csv
 tmp/
 db/seed_data/*.txt
 *.swp
