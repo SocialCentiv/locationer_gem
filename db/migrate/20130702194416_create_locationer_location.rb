@@ -1,4 +1,4 @@
-class CreateGeoData < ActiveRecord::Migration
+class CreateLocationerLocation < ActiveRecord::Migration
   def change
     create_table "locationer_locations" do |t|
       t.string    :name
