@@ -8,11 +8,10 @@ module Locationer
     end
 
     def nearby_cities(*options)
-      puts options.inspect
       attributes = options.extract_options!
       range = attributes.fetch(:range) { DEFAULT_RANGE }
       if city = find_city_by(attributes)
-        Locationer::Location.find_by_sql(nearby_cities_query_string(city, range))
+        Locationer::City.find_by_sql(nearby_cities_query_string(city, range))
       else
         []
       end
