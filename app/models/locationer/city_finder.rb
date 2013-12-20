@@ -1,12 +1,14 @@
 module Locationer
   class CityFinder
-    DEFAULT_RANGE = 10
+    DEFAULT_RANGE = 0
     FEATURE_CODE_COUNTRY = "PCLI"
 
     def initialize(country_code)
       @country = country_code
     end
 
+    #options are  
+    # => :city, :subdivision, :range 
     def nearby_cities(*options)
       attributes = options.extract_options!
       range = attributes.fetch(:range) { DEFAULT_RANGE }
