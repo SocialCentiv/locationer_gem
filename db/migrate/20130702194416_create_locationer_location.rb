@@ -15,8 +15,12 @@ class CreateLocationerLocation < ActiveRecord::Migration
       t.datetime  :modification_date 
     end
 
-    add_index "locationer_locations", [:asciiname, :latitude, 
-      :longitude, :feature_class, :feature_code,
-      :admin1_code]
+    add_index "locationer_locations", :asciiname
+    add_index "locationer_locations", :latitude
+    add_index "locationer_locations", :longitude
+    add_index "locationer_locations", :feature_class
+    add_index "locationer_locations", :feature_code
+    add_index "locationer_locations", :admin1_code
+
   end
 end
