@@ -19,6 +19,8 @@
 
 module Locationer
   class Location < ActiveRecord::Base
+    include LocationHelper
+    
     def self.find_by_city_state(city,subdivision)
       self.where(name: city).where(admin1_code: subdivision)
     end
