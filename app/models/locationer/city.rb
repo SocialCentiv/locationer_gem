@@ -24,7 +24,7 @@ module Locationer
     belongs_to :subdivision, foreign_key: "admin1_code", primary_key: "admin1_code"
 
     FEATURE_CLASS_CITY = "P"
-    RADIUS_DEFAULT = 10
+    RADIUS_DEFAULT = 0
 
     default_scope {where(feature_class:FEATURE_CLASS_CITY)}
 
