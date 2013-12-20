@@ -22,11 +22,12 @@ module Locationer
 
     def nearby_cities_query_string(city,range)
       <<-SQL
-        SELECT * 
+        SELECT * , (sqrt(pow((longitude - #{city.longitude}) * cos(#{city.latitude} * pi() / 180),2) + pow(latitude - #{city.latitude},2)) * pi() * 7926.38 / 360) as distance
         FROM locationer_locations 
         WHERE #{range_where_query_string(city,range)}
           AND feature_class = 'P' 
           AND feature_code LIKE 'PPL%'
+        ORDER BY distance ASC
       SQL
     end
 
