@@ -3,14 +3,34 @@ require_dependency "locationer/application_controller"
 module Locationer
   class CitiesController < ApplicationController
     respond_to :json
-    
+
     def index
       validate_params
-      @cities = City.find_nearby_cities_around(*converted_params) if @errors.empty?
+      @cities = City.find_nearby_cities_around(*converted_params) if @errors.blank?
       
-      if @cities
-        respond_with(CityJsonDecorator.cities_to_json(@cities))
-      end
+      # if @cities
+      #   respond_with(CityJsonDecorator.cities_to_json(@cities))
+      # else
+
+      # end
+
+      respond_with(@cities) do |format|
+        case
+        when @cities.blank?
+          if @errors.blank?
+            #It should at least return the center city, 
+            #but if @cities is empty then it means the center city was not
+            #found either
+            format.json { render json: { success: false,
+              errors:  ["Records not found"]}, status: 404}     
+          else
+            format.json { render json: { success: false,
+              errors: @errors}, status: 400} 
+          end
+        else
+          format.json { render json: CityJsonDecorator.cities_to_json(@cities)}
+        end
+      end       
     end
 
     private

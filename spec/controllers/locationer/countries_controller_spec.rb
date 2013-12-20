@@ -16,18 +16,45 @@ module Locationer
     let(:valid_session) { {} }
 
     describe "GET show" do
-      before(:each) do
-        @country = create :locationer_country, :us
+      context "when the resource is found" do
+        before(:each) do
+          @country = create :locationer_country, :us
+        end
+
+        it "assigns the requested country as @country" do
+          get :show, {:id => @country.id, :format => :json}, valid_session
+          assigns(:country).should eq(@country)
+        end
+
+        it "should return json" do
+          get :show, {:id => @country.id, :format => :json}, valid_session
+          response.body.should eql("{\"id\":#{@country.id},\"name\":\"United States\",\"code\":\"US\"}")
+        end     
+
+        it "should return status 200" do
+          get :show, {:id => @country.id, :format => :json}, valid_session        
+          
+          response.status.should eql(200)  
+        end              
       end
 
-      it "assigns the requested country as @country" do
-        get :show, {:id => @country.id, :format => :json}, valid_session
-        assigns(:country).should eq(@country)
-      end
+      context "when the resource is not found" do
 
-      it "should return json" do
-        get :show, {:id => @country.id, :format => :json}, valid_session
-        response.body.should eql("{\"id\":#{@country.id},\"name\":\"United States\",\"code\":\"US\"}")
+        it "assigns the requested country as nil" do
+          get :show, {:id => 11, :format => :json}, valid_session
+          assigns(:country).should eq(nil)
+        end
+
+        it "should return json" do
+          get :show, {:id => 11, :format => :json}, valid_session
+          response.body.should eql("{\"success\":false,\"errors\":[\"Record not found\"]}")
+        end   
+
+        it "should return status 404" do
+          get :show, {:id => 11, :format => :json}, valid_session        
+          
+          response.status.should eql(404)  
+        end                  
       end      
     end   
   end 
