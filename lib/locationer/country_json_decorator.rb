@@ -1,6 +1,10 @@
 
 module Locationer
   class CountryJsonDecorator
+    def self.countries_to_json(countries)
+      (countries.collect {|country| self.new(country).to_hash}).to_json
+    end
+
     def initialize(country)
       @country = country
     end
@@ -13,10 +17,14 @@ module Locationer
       @country.country_code
     end
 
-    def to_json
+    def to_hash
       { id: @country.id,
         name: self.name,
-        code: self.code}.to_json
+        code: self.code}
+    end    
+
+    def to_json
+      to_hash.to_json
     end
   end
 end
