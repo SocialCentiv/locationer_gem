@@ -4,6 +4,14 @@ module Locationer
   class SubdivisionsController < ApplicationController
     respond_to :json 
 
+    def index
+      @subdivisions = Subdivision.all
+
+      respond_with(@subdivisions) do |format|
+        format.json { render json: SubdivisionJsonDecorator.subdivisions_to_json(@subdivisions)}
+      end       
+    end    
+
     def show
       @subdivision = Subdivision.find_by_id(params[:id])
 

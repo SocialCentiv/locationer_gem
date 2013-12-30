@@ -4,6 +4,14 @@ module Locationer
   class CountriesController < ApplicationController
     respond_to :json 
 
+    def index
+      @countries = Country.all
+
+      respond_with(@countries) do |format|
+        format.json { render json: CountryJsonDecorator.countries_to_json(@countries)}
+      end       
+    end
+
     def show
       @country = Country.find_by_id(params[:id])
 

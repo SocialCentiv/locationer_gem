@@ -15,6 +15,30 @@ module Locationer
     # CountryTargetsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
 
+    describe "GET index" do
+      context "when the resource is found" do
+        before(:each) do
+          @country = create :locationer_country, :us
+        end
+
+        it "assigns the requested country as @country" do
+          get :index, {:format => :json}, valid_session
+          assigns(:countries).should eq([@country])
+        end
+
+        it "should return json" do
+          get :index, {:format => :json}, valid_session
+          response.body.should eql("[{\"id\":#{@country.id},\"name\":\"United States\",\"code\":\"US\"}]")
+        end     
+
+        it "should return status 200" do
+          get :index, {:format => :json}, valid_session   
+          
+          response.status.should eql(200)  
+        end          
+      end
+    end
+
     describe "GET show" do
       context "when the resource is found" do
         before(:each) do
