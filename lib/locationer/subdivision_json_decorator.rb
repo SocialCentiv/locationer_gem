@@ -22,9 +22,12 @@ module Locationer
     end
 
     def to_hash
-      { id: @subdivision.id,
-        code: self.code,
-        country_id: self.country_id}      
+      {
+        id:         @subdivision.id,
+        code:       self.code,
+        country_id: self.country_id,
+        name:       self.name
+      }      
     end
 
     def to_json
