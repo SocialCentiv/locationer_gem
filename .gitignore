@@ -1,7 +1,8 @@
+.DS_Store
 .bundle/
 unprocessed_records.csv
 tmp/
-db/seed_data/*.txt
+db/seed_data/*
 *.swp
 log/*.log
 *.gem

@@ -11,9 +11,13 @@ module Locationer
     # => :city, :subdivision, :range 
     def nearby_cities(*options)
       attributes = options.extract_options!
-      range = attributes.fetch(:range) { DEFAULT_RANGE }
+      range = ( attributes.fetch(:range) { DEFAULT_RANGE } ).to_f
       if city = find_city_by(attributes)
-        Locationer::City.find_by_sql(nearby_cities_query_string(city, range))
+        if range == 0
+          [city]
+        else
+          Locationer::City.find_by_sql(nearby_cities_query_string(city, range))
+        end
       else
         []
       end
@@ -38,7 +42,7 @@ module Locationer
 
     def find_city_by(attributes)
       city_name = attributes.fetch(:city) { raise ArgumentError, 'No city name provided' }
-      reference = Locationer::Location.where("country_code = ? AND asciiname = ?", @country.upcase, city_name.downcase)
+      reference = Locationer::City.where("country_code = ? AND asciiname = ?", @country.upcase, city_name.downcase)
       reference = reference.where(admin1_code: attributes[:subdivision]) if attributes[:subdivision]
       reference = reference.where(feature_class: "P")
       reference.first
