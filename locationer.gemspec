@@ -13,8 +13,10 @@ Gem::Specification.new do |s|
   s.summary     = "Library to provide an API for giving nearby cities in US based on the given city."
   s.description = "Locationer is an mountable API that provides functionality of providing results of cities nearby a given city based on the provided range."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["spec/**/*"]
+  s.files         = `git ls-files`.split($/)
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~> 4.0"
   s.add_dependency "ruby-progressbar"
