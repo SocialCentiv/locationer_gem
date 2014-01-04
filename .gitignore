@@ -1,4 +1,5 @@
 .bundle/
+.ruby-gemset
 unprocessed_records.csv
 tmp/
 db/seed_data/*.txt
