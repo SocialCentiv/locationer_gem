@@ -10,6 +10,7 @@
 #  longitude         :float
 #  feature_class     :string(255)
 #  feature_code      :string(255)
+#  country_code      :string(255)
 #  admin1_code       :string(255)
 #  population        :integer
 #  timezone          :string(255)
