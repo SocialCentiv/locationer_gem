@@ -31,4 +31,11 @@ ActiveRecord::Schema.define(version: 20130702194416) do
     t.datetime "modification_date"
   end
 
+  add_index "locationer_locations", ["admin1_code"], name: "index_locationer_locations_on_admin1_code", using: :btree
+  add_index "locationer_locations", ["asciiname"], name: "index_locationer_locations_on_asciiname", using: :btree
+  add_index "locationer_locations", ["feature_class"], name: "index_locationer_locations_on_feature_class", using: :btree
+  add_index "locationer_locations", ["feature_code"], name: "index_locationer_locations_on_feature_code", using: :btree
+  add_index "locationer_locations", ["latitude"], name: "index_locationer_locations_on_latitude", using: :btree
+  add_index "locationer_locations", ["longitude"], name: "index_locationer_locations_on_longitude", using: :btree
+
 end
