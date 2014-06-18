@@ -29,7 +29,7 @@ module Locationer
 
         it "should return json" do
           get :index, {:format => :json}, valid_session
-          response.body.should eql("[{\"id\":#{@subdivision.id},\"code\":\"TX\",\"country_id\":#{@country.id}}]")
+          response.body.should eql("[{\"id\":#{@subdivision.id},\"code\":\"TX\",\"country_id\":#{@country.id},\"name\":\"Texas\"}]")
         end     
 
         it "should return status 200" do
@@ -54,7 +54,7 @@ module Locationer
 
         it "should return json" do
           get :show, {:id => @subdivision.id, :format => :json}, valid_session
-          response.body.should eql("{\"id\":#{@subdivision.id},\"code\":\"TX\",\"country_id\":#{@country.id}}")
+          response.body.should eql("{\"id\":#{@subdivision.id},\"code\":\"TX\",\"country_id\":#{@country.id},\"name\":\"Texas\"}")
         end 
       end    
 
