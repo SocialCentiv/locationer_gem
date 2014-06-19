@@ -16,7 +16,7 @@ module Locationer
         if range == 0
           [city]
         else
-          Locationer::City.find_by_sql(nearby_cities_query_string(city, range))
+          Locationer::City.find_by_sql(cities_within_radius(city, range))
         end
       else
         []
@@ -36,8 +36,30 @@ module Locationer
       SQL
     end
 
+    def cities_within_radius(city,range)
+      <<-SQL
+        SELECT * , (sqrt(pow((longitude - #{city.longitude}) * cos(#{city.latitude} * pi() / 180),2) + pow(latitude - #{city.latitude},2)) * pi() * 7926.38 / 360) as distance
+        FROM (#{cities_within_parimeter(city,range)}) AS ll 
+        WHERE #{range_where_query_string(city,range)}
+          AND feature_code LIKE 'PPL%'
+        ORDER BY distance ASC
+      SQL
+    end    
+
     def range_where_query_string(city,range)
       "sqrt(pow((longitude - #{city.longitude}) * cos(#{city.latitude} * pi() / 180),2) + pow(latitude - #{city.latitude},2)) * pi() * 7926.38 / 360 <= #{range} "     
+    end
+
+    def cities_within_parimeter(city,range)
+      <<-SQL
+        SELECT * 
+        FROM locationer_locations 
+        WHERE longitude <= #{city.longitude + miles_to_longitude(range)}
+          AND longitude >= #{city.longitude - miles_to_longitude(range)}
+          AND latitude  <= #{city.latitude + miles_to_latitude(range)} 
+          AND latitude  >= #{city.latitude - miles_to_latitude(range)} 
+          AND feature_class = 'P' 
+      SQL
     end
 
     def find_city_by(attributes)
@@ -48,6 +70,13 @@ module Locationer
       reference.first
     end
 
+    def miles_to_latitude(miles)
+      miles.to_f / 68.0
+    end
+
+    def miles_to_longitude(miles)
+      miles.to_f / 53.0
+    end
 
     # DEFAULT_RANGE = 10
 
