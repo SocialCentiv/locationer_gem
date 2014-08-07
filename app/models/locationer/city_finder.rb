@@ -12,11 +12,16 @@ module Locationer
     def nearby_cities(*options)
       attributes = options.extract_options!
       range = ( attributes.fetch(:range) { DEFAULT_RANGE } ).to_f
-      if city = find_city_by(attributes)
+      if city = (find_city_by(attributes) || fuzzy_find_city_by(attributes))
         if range == 0
           [city]
         else
-          Locationer::City.find_by_sql(cities_within_radius(city, range))
+          cities = Locationer::City.find_by_sql(cities_within_radius(city, range))
+          if cities.present?
+            center_city = (cities.select{|c| c.id == city.id}).first
+            center_city.match_type = city.match_type
+          end
+          cities
         end
       else
         []
@@ -68,6 +73,27 @@ module Locationer
       reference = reference.where(admin1_code: attributes[:subdivision]) if attributes[:subdivision]
       reference = reference.where(feature_class: "P")
       reference.first
+    end
+
+    def fuzzy_find_city_by(attributes)
+      city_name = attributes.fetch(:city) { raise ArgumentError, 'No city name provided' }
+      reference = if attributes[:subdivision]
+        Locationer::City
+          .fuzzy_search(asciiname: city_name.downcase) 
+          .where("country_code = ?", @country.upcase)
+          .where(admin1_code: attributes[:subdivision])
+          .where(feature_class: "P")
+          .first  
+      else
+        Locationer::City
+          .fuzzy_search(asciiname: city_name.downcase) 
+          .where("country_code = ?", @country.upcase)
+          .where(feature_class: "P")
+          .first  
+      end  
+
+      reference.match_type = Locationer::City::MATCH_FUZZY if reference
+      reference  
     end
 
     def miles_to_latitude(miles)

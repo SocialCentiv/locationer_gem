@@ -42,7 +42,7 @@ module Locationer
             :subdivision_code => @dallas.admin1_code,
             :country_code => @dallas.country_code,
             :radius => 5.0, :format => :json}, valid_session
-          response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id}}]")
+          response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"exact\"},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id},\"match_type\":\"exact\"}]")
         end     
 
         it "should return status 200" do
@@ -68,8 +68,62 @@ module Locationer
               :subdivision_code => @dallas.admin1_code,
               :country_code => @dallas.country_code,
               :format => :json}, valid_session
-            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}}]")
+            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"exact\"}]")
           end              
+        end
+
+        context "when the city is mispelled" do
+          before(:each) do
+            @misspelled_dallas = "dalas"
+            @cities = City.find_nearby_cities_around(@misspelled_dallas,
+              { "subdivision_code" => "TX",
+                "country_code" => "US",
+                "radius" => 5.0} )
+          end
+
+          it "assigns the requested cities as @cities" do
+            get :index, {:name => @misspelled_dallas, 
+              :subdivision_code => @dallas.admin1_code,
+              :country_code => @dallas.country_code,
+              :radius => 5.0, :format => :json}, valid_session
+            assigns(:cities).should eq(@cities)
+          end
+
+          it "should return json" do
+            get :index, {:name => @misspelled_dallas, 
+              :subdivision_code => @dallas.admin1_code,
+              :country_code => @dallas.country_code,
+              :radius => 5.0, :format => :json}, valid_session
+
+            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"fuzzy\"},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id},\"match_type\":\"exact\"}]")
+          end     
+
+          it "should return status 200" do
+            get :index, {:name => @misspelled_dallas, 
+              :subdivision_code => @dallas.admin1_code,
+              :country_code => @dallas.country_code,
+              :radius => 5.0, :format => :json}, valid_session      
+            
+            response.status.should eql(200)  
+          end 
+
+          context "when radius is nil" do
+            it "assigns the requested cities as center city only" do
+              get :index, {:name => @misspelled_dallas, 
+                :subdivision_code => @dallas.admin1_code,
+                :country_code => @dallas.country_code, 
+                :format => :json}, valid_session
+              assigns(:cities).should eq([@dallas])
+            end
+
+            it "should return json for center city only" do
+              get :index, {:name => @misspelled_dallas, 
+                :subdivision_code => @dallas.admin1_code,
+                :country_code => @dallas.country_code,
+                :format => :json}, valid_session
+              response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"fuzzy\"}]")
+            end              
+          end          
         end
       end
 

@@ -20,7 +20,9 @@ module Locationer
     def to_hash
       { id: @city.id,
         name: self.name,
-        subdivision_id: @city.subdivision.id}
+        subdivision_id: @city.subdivision.id,
+        match_type: @city.match_type
+      }
     end
 
     def to_json
