@@ -25,9 +25,17 @@ module Locationer
     belongs_to :subdivision, foreign_key: "admin1_code", primary_key: "admin1_code"
 
     FEATURE_CLASS_CITY = "P"
-    RADIUS_DEFAULT = 0
+    RADIUS_DEFAULT     = 0
+    MATCH_EXACT        = "exact"
+    MATCH_FUZZY        = "fuzzy"
 
     default_scope {where(feature_class:FEATURE_CLASS_CITY)}
+
+    after_initialize :init
+
+    def init
+      @match_type = MATCH_EXACT
+    end
 
     def self.find_nearby_cities_around(center_city, options = {})
       subdivision_code =  options.fetch("subdivision_code"){raise "subdivision_code missing"}
@@ -36,6 +44,14 @@ module Locationer
 
       cf_options = city_finder_adapter(center_city.downcase, subdivision_code.upcase, radius)
       CityFinder.new(country_code.upcase).nearby_cities(cf_options)
+    end
+
+    def match_type
+      @match_type
+    end
+
+    def match_type=(val)
+      @match_type = val
     end
 
     private
