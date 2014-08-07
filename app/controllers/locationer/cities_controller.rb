@@ -7,12 +7,6 @@ module Locationer
     def index
       validate_params
       @cities = City.find_nearby_cities_around(*converted_params) if @errors.blank?
-      
-      # if @cities
-      #   respond_with(CityJsonDecorator.cities_to_json(@cities))
-      # else
-
-      # end
 
       respond_with(@cities) do |format|
         case
