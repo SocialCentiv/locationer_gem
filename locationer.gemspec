@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.0"
   s.add_dependency "ruby-progressbar"
+  s.add_dependency 'textacular'
 
   s.add_development_dependency "pg"
   s.add_development_dependency "byebug"

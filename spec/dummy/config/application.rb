@@ -9,6 +9,7 @@ require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
 require "locationer"
+require "textacular"
 
 module Dummy
   class Application < Rails::Application
