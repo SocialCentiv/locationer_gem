@@ -42,7 +42,7 @@ module Locationer
             :subdivision_code => @dallas.admin1_code,
             :country_code => @dallas.country_code,
             :radius => 5.0, :format => :json}, valid_session
-          response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"exact\"},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id},\"match_type\":\"exact\"}]")
+          response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id}}]")
         end     
 
         it "should return status 200" do
@@ -68,7 +68,7 @@ module Locationer
               :subdivision_code => @dallas.admin1_code,
               :country_code => @dallas.country_code,
               :format => :json}, valid_session
-            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"exact\"}]")
+            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}}]")
           end              
         end
 
@@ -95,7 +95,7 @@ module Locationer
               :country_code => @dallas.country_code,
               :radius => 5.0, :format => :json}, valid_session
 
-            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"fuzzy\"},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id},\"match_type\":\"exact\"}]")
+            response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}},{\"id\":#{@city_within_4_miles.id},\"name\":\"Oak Cliff\",\"subdivision_id\":#{@city_within_4_miles.subdivision.id}}]")
           end     
 
           it "should return status 200" do
@@ -121,7 +121,7 @@ module Locationer
                 :subdivision_code => @dallas.admin1_code,
                 :country_code => @dallas.country_code,
                 :format => :json}, valid_session
-              response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id},\"match_type\":\"fuzzy\"}]")
+              response.body.should eql("[{\"id\":#{@dallas.id},\"name\":\"Dallas\",\"subdivision_id\":#{@dallas.subdivision.id}}]")
             end              
           end          
         end

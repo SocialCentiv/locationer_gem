@@ -19,7 +19,6 @@ module Locationer
           cities = Locationer::City.find_by_sql(cities_within_radius(city, range))
           if cities.present?
             center_city = (cities.select{|c| c.id == city.id}).first
-            center_city.match_type = city.match_type
           end
           cities
         end
@@ -92,7 +91,6 @@ module Locationer
           .first  
       end  
 
-      reference.match_type = Locationer::City::MATCH_FUZZY if reference
       reference  
     end
 
