@@ -44,6 +44,17 @@ FactoryGirl.define do
       population 22875689
       timezone "America/Chicago"
     end
+
+    trait :mo do
+      name "missouri"
+      asciiname "missouri"
+      latitude 38.62
+      longitude -90.19
+      country_code "US"
+      admin1_code "MO"
+      population 22875689
+      timezone "America/Chicago"
+    end    
   end
 end
 

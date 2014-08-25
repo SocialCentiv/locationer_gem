@@ -125,6 +125,30 @@ module Locationer
             end              
           end          
         end
+
+        context "when an alternate name is provided" do
+          before(:each) do
+            @missouri         = create :locationer_subdivision, :mo
+            @lake_saint_louis = create :locationer_city, :lake_saint_louise
+            @st_louise        = create :locationer_city, :st_louise
+
+            @alternate_name = "saint louis"
+
+            @cities = City.find_nearby_cities_around(@alternate_name,
+              { "subdivision_code" => "MO",
+                "country_code" => "US",
+                "radius" => 0.0} )
+          end
+
+          it "fuzzy match should return the matched city with the highest population" do
+            get :index, {:name => @alternate_name, 
+              :subdivision_code => @st_louise.admin1_code,
+              :country_code => @st_louise.country_code,
+              :radius => 5.0, :format => :json}, valid_session
+
+            assigns(:cities).last.name.should eql("st. louis")
+          end
+        end
       end
 
       context "when the resource is not found" do

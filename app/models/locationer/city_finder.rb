@@ -82,12 +82,16 @@ module Locationer
           .where("country_code = ?", @country.upcase)
           .where(admin1_code: attributes[:subdivision])
           .where(feature_class: "P")
+          .to_a
+          .sort {|a,b| b.population <=> a.population} #sort by desc population
           .first  
       else
         Locationer::City
           .fuzzy_search(asciiname: city_name.downcase) 
           .where("country_code = ?", @country.upcase)
           .where(feature_class: "P")
+          .to_a
+          .sort {|a,b| b.population <=> a.population} #sort by desc population
           .first  
       end  
 

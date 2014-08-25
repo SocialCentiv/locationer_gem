@@ -20,6 +20,30 @@ FactoryGirl.define do
   factory :locationer_city, :class => 'Locationer::City' do
     feature_class "P"
 
+    trait :st_louise do
+      name "st. louis"
+      asciiname "st. louis"
+      latitude 38.62
+      longitude -90.19
+      feature_code "PPLA2"
+      country_code "US"
+      admin1_code "MO"
+      population 319294
+      timezone "America/Chicago"      
+    end    
+
+    trait :lake_saint_louise do
+      name "lake saint louis"
+      asciiname "lake saint louis"
+      latitude 38.79
+      longitude -90.78
+      feature_code "PPL"
+      country_code "US"
+      admin1_code "MO"
+      population 14545
+      timezone "America/Chicago"      
+    end      
+
     trait :dallas do
       name "dallas"
       asciiname "dallas"
